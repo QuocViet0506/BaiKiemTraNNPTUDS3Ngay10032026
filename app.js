@@ -24,14 +24,20 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/v1/categories', require('./routes/categories'));
 app.use('/api/v1/products', require('./routes/products'));
+app.use('/api/v1/users', require('./routes/users'));
+app.use('/api/v1/roles', require('./routes/roles'));
 
-mongoose.connect('mongodb://localhost:27017/Baitap10032026S3');
+const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/Baitap10032026S3';
+mongoose.connect(mongoUri);
 mongoose.connection.on('connected', function () {
-  console.log("connected");
-})
+  console.log('MongoDB connected:', mongoUri);
+});
 mongoose.connection.on('disconnected', function () {
-  console.log("disconnected");
-})
+  console.log('MongoDB disconnected');
+});
+mongoose.connection.on('error', function (err) {
+  console.error('MongoDB connection error:', err);
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
